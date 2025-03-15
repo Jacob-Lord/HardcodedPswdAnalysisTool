@@ -1,0 +1,12 @@
+password
+pwd
+pswd
+passwrd
+passwd
+pw
+backdoor_pass
+backdoor
+backdoor_pw
+backdoor_pwd
+backdoor_pswd
+backdoor_password
