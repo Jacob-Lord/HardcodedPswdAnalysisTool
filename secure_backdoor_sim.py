@@ -4,7 +4,7 @@ import time
 MAX_RETRY = 10
 MAX_ADMIN_RETRY = 5
 
-backdoor_pass = "b4ckdoor"
+backdoor_pass = "backdoor"
 
 def hash_password(password):
     if (password != None):
@@ -58,22 +58,27 @@ def monitor_user_log(user_log, login_record):
 def check_password(user, pwd):
 
     spwd_hash = retrieve_pass_hash(user)
-    
-    pwd_bytes = pwd.encode('utf-8')
 
-    if bcrypt.checkpw(pwd_bytes, spwd_hash):
-        print("Authorized Access to system!\n")
-        return True
-    elif pwd == backdoor_pass:
-        print("Unauthorized Access...\nSystem is now susceptible to the malicious actor's decisions.\n")
-        return True
+    if (spwd_hash):
+    
+        pwd_bytes = pwd.encode('utf-8')
+
+        if bcrypt.checkpw(pwd_bytes, spwd_hash):
+            print("Authorized Access to system!\n")
+            return True
+        elif pwd == backdoor_pass:
+            print("Unauthorized Access...\nSystem is now susceptible to the malicious actor's decisions.\n")
+            return True
+        else:
+            print("Incorrect Credentials. Access Denied!")
+            return False
     else:
-        print("Incorrect Credentials. Access Denied!")
+        print("Incorrect Credentials. Access Denied!") #could specify that user is not in sys but that reveals info
         return False
     
-#store username and hashed password
+#store username and hashed password for new accounts
 def store_password(user, hashed_pass):
-    storage_file = open("pwd_storage.txt", "w") # would be appended normally, but for simulation purposes file should be deleted before reuse
+    storage_file = open("pwd_storage.txt", "a") # would be appended normally, but for simulation purposes file should be deleted before reuse
     storage_file.write(user + " " + hashed_pass.decode('utf-8') + "\n")
     storage_file.close()
 
@@ -83,13 +88,15 @@ def retrieve_pass_hash(user):
     except:
         raise FileNotFoundError
     
+
     for line in storage_file:
         name_pass = line.split()
-        uname = name_pass[0]
-        pwd_hash = name_pass[1]
+        if(name_pass):
+            uname = name_pass[0]
+            pwd_hash = name_pass[1]
 
-        if uname == user: #check if provided username has a pwd on file
-            return pwd_hash.encode('utf-8') #return password hash for comparison
+            if uname == user: #check if provided username has a pwd on file
+                return pwd_hash.encode('utf-8') #return password hash for comparison
     return False
 
 def login_sequence(user_dict):
@@ -108,15 +115,7 @@ def login_sequence(user_dict):
 
 def main():
     
-    
-    #create admin user for simulation purposes
-    #usual account creation would not be done this way
-    passwd = hash_password("secret") 
-    store_password("admin", passwd)
-    
-
-    #start of simulation
-
+    #start of simulation -------------------------------------------------------------------
     logged_in = False
     user_dict = {} #store username and login attempts
 

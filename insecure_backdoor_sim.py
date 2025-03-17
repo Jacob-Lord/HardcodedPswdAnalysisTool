@@ -1,4 +1,4 @@
-backdoor_pass = "b4ckdoor"
+backdoor_pass = "backdoor"
 
 def check_password(user_input):
     password = "secret"
