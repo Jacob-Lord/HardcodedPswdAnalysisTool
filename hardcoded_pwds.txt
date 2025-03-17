@@ -1,0 +1,3 @@
+2 hardcoded passwords found!
+password = "secret" at code position 319
+backdoor_pass = "b4ckdoor" at code position 255
