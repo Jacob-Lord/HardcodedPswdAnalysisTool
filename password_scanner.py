@@ -1,4 +1,5 @@
 import re
+import sys
 
 def scan_pwd_names_file(pwd_file, pwd_id_list):
     for name in pwd_file: 
@@ -45,7 +46,7 @@ def log_results(results):
     #only write a log if a hardcoded password was found
     if (pwd_list_size > 0):
         #open new file to store log for results
-        hardcoded_pwds = open("hardcoded_pwds.txt", "w")
+        hardcoded_pwds = open("hardcoded_pwds_output.txt", "w")
 
         #write the total number of passwords found at the top of the file
         hardcoded_pwds.write( str(pwd_list_size) + " hardcoded passwords found!\n")
@@ -58,7 +59,7 @@ def log_results(results):
         #close file when finished    
         hardcoded_pwds.close()
 
-def main():
+def main(*args):
     #create list to store possible var names for hardcoded passwords
     password_id_list = [] 
 
@@ -75,11 +76,18 @@ def main():
     #close file when finished using
     pwd_id_file.close() 
 
+    #get file name from arguments
+    if len(sys.argv) > 2:
+        print("Too many cmd line arguments provided.\nFormat is 'py ./password_scanner.py <file_name>'")
+    else:
+        file_name = sys.argv[1] # second cmd line arg should be target file since first is the program name
+
 
     #catch file not found errors
+    if not file_name:
+        print("No file provided to analyze. Format is 'py ./password_scanner.py <file_name>'")
     try:
-        #open target file to search contents for hardcoded passwords
-        target_file = open("secure_backdoor_sim.py", "r") 
+        target_file = open(file_name, "r")
     except:
         raise FileNotFoundError
     else:
@@ -97,8 +105,6 @@ def main():
 
         #log results of search for hardcoded passwords
         log_results(found_pwds)
-
-        
 
 if __name__ == '__main__':
     main()
