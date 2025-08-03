@@ -34,5 +34,6 @@ Hardcoded passwords are a common yet critical security vulnerability that can le
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/hardcoded-pswd-analysis-tool.git
-cd hardcoded-pswd-analysis-tool
+git clone https://github.com/Jacob-Lord/HardcodedPswdAnalysisTool.git
+cd HardcodedPswdAnalysisTool
+
